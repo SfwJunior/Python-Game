@@ -1,0 +1,116 @@
+from random import randint
+
+import pygame
+pygame.init()
+
+Win_width = 600
+Win_height = 580
+cb_size = 20
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+
+# screen
+window = pygame.display.set_mode((Win_width,Win_height))
+pygame.display.set_caption('Snake')
+
+# snake position
+width = (randint(0,580)//20)*20
+height = (randint(0,560)//20)*20
+
+# food position
+food_w = (randint(0,580)//20)*20
+food_h = (randint(0,560)//20)*20
+
+def snake(snake_list, cb_size):
+    for XnY in snake_list:
+        pygame.draw.rect(window,white,[XnY[0],XnY[1],cb_size,cb_size])
+
+def food():
+    pygame.draw.rect(window,red,[food_w,food_h,cb_size,cb_size])
+
+move_x = 0
+move_y = 0
+
+# draw and clean the snake
+# it do a snake grow up
+snake_list = list()
+snake_length = 1
+
+# slow the loop
+clock = pygame.time.Clock()
+
+GameExit = False
+
+while not GameExit:
+
+    clock.tick(10)
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            GameExit = True
+
+        # move the snake
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                move_x = cb_size
+                move_y = 0
+            if event.key == pygame.K_LEFT:
+                move_x = -cb_size
+                move_y = 0
+            if event.key == pygame.K_UP:
+                move_y = -cb_size
+                move_x = 0
+            if event.key == pygame.K_DOWN:
+                move_y = cb_size
+                move_x = 0
+
+    # for the cube go to any direction, do the sum of down
+    width += move_x
+    height += move_y
+    
+    # this line do the cube to be only on one place of each time        
+    window.fill(black)
+
+    # this line command is necessary for to do the snake grow up
+    # snake lenght collected
+    snake_head = list()
+    snake_head.append(width)
+    snake_head.append(height)
+    snake_list.append(snake_head)
+    
+    # maintain the snake small
+    if len(snake_list) > snake_length:
+        del snake_list[0]
+        
+    # this line code do the snake die if she eat himself
+    for EachSegment in snake_list[:-1]:
+        if EachSegment == snake_head:
+            GameExit = True
+    
+    snake(snake_list, cb_size)
+
+    # end game
+    if width > 580:
+        GameExit = True
+    if width < 0:
+        GameExit = True
+    if height > 560:
+        GameExit = True
+    if height < 0:
+        GameExit = True
+    
+    food()
+
+    # eat the food
+    if width == food_w and height == food_h:
+        food_w = (randint(0,580)//20)*20
+        food_h = (randint(0,560)//20)*20
+
+        # to do the snake grow up
+        snake_length += 1
+    
+    pygame.display.update()
+    
+pygame.quit()
+quit()
