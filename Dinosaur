@@ -1,0 +1,237 @@
+from random import choice
+
+import pygame as pg
+pg.init()
+
+white = (255,255,255)
+black = (0,0,0)
+
+width = 800
+height = 200
+
+dinosaur_posX = 150
+dinosaur_posY = 140
+
+clound1_posX = 250
+clound1_posY = 15
+
+clound2_posX = 600
+clound2_posY = 25
+
+OneTree_posX = 800
+OneTree_posY = 145
+
+TwoTree_posX = 800
+TwoTree_posY = 160
+
+LotTree_posX = 800
+LotTree_posY = 150
+
+screen = pg.display.set_mode((width,height))
+
+def OneTree():
+    O_img = pg.image.load('one tree.png')
+    screen.blit(O_img, (OneTree_posX,OneTree_posY))
+
+def TwoTree():
+    TT_img = pg.image.load('two tree.png')
+    screen.blit(TT_img, (TwoTree_posX,TwoTree_posY))
+
+def LotTree():
+    LT_img = pg.image.load('lot tree.png')
+    screen.blit(LT_img, (LotTree_posX,LotTree_posY))
+
+def clound1():
+    C_img = pg.image.load('clound.png')
+    screen.blit(C_img, (clound1_posX,clound1_posY))
+
+def clound2():
+    C_img = pg.image.load('clound.png')
+    screen.blit(C_img, (clound2_posX,clound2_posY))
+
+def dino():
+    D_img = pg.image.load('dinosaur.png')
+    screen.blit(D_img,(dinosaur_posX,dinosaur_posY))
+
+def line():
+    pg.draw.line(screen,black,[0,180],[800,180],1)
+
+move_dino = 0
+
+move_clound1 = 0
+
+move_clound2 = 0
+
+move_OneTree = 0
+
+move_TwoTree = 0
+
+move_LotTree = 0
+
+list = [0,1,2]
+
+chose = 0
+
+game_loop = True
+
+while game_loop:
+    
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            game_loop = False
+
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE:
+                move_dino = -2
+
+    # dinosaur jump
+    if dinosaur_posY == 60:
+        move_dino = 2
+
+    dinosaur_posY += move_dino
+
+    if dinosaur_posY == 140:
+        move_dino = 0
+    
+    screen.fill(white)
+
+    clound1()
+    move_clound1 = -1
+    clound1_posX += move_clound1
+    if clound1_posX < 0:
+        clound1_posX = 800
+
+    clound2()
+    move_clound2 = -1
+    clound2_posX += move_clound2
+    if clound2_posX < 0:
+        clound2_posX = 800
+
+    line()
+
+    dino()
+
+    # move tree and reset tree
+    if chose == 0:
+        OneTree()
+        move_OneTree = -2
+        OneTree_posX += move_OneTree
+        if OneTree_posX == 0:
+            
+            OneTree_posX = 800
+            TwoTree_posX = 800
+            LotTree_posX = 800
+            
+            chose = choice(list)
+
+    # crash one tree
+    if dinosaur_posX == OneTree_posX:
+        if dinosaur_posY > 90:
+
+            OneTree_posX = 800
+            TwoTree_posX = 800
+            LotTree_posX = 800
+
+            game_exit = True
+            
+            while game_exit:
+
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        game_exit = False
+                        game_loop = False
+
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_SPACE:
+                            game_exit = False
+                            game_loop = True
+
+                R_img = pg.image.load('return.png')
+                screen.blit(R_img, (350,50))
+                
+                pg.display.update()
+                
+    # move tree and reset tree
+    if chose == 1:
+        TwoTree()
+        move_TwoTree = -2
+        TwoTree_posX += move_TwoTree
+        if TwoTree_posX == 0:
+
+            OneTree_posX = 800
+            TwoTree_posX = 800
+            LotTree_posX = 800
+            
+            chose = choice(list)
+
+    # crash two tree
+    if dinosaur_posX == TwoTree_posX:
+        if dinosaur_posY > 110:
+            OneTree_posX = 800
+            TwoTree_posX = 800
+            LotTree_posX = 800
+
+            game_exit = True
+            
+            while game_exit:
+
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        game_exit = False
+                        game_loop = False
+
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_SPACE:
+                            game_exit = False
+                            game_loop = True
+
+                R_img = pg.image.load('return.png')
+                screen.blit(R_img, (350,50))
+                
+                pg.display.update()
+                
+    # move tree and reset tree
+    if chose == 2:
+        LotTree()
+        move_LotTree = -2
+        LotTree_posX += move_LotTree
+        if LotTree_posX == 0:
+
+            OneTree_posX = 800
+            TwoTree_posX = 800
+            LotTree_posX = 800
+        
+            chose = choice(list)
+
+    # crash lot tree
+    if dinosaur_posX == LotTree_posX:
+        if dinosaur_posY > 85:
+            
+            OneTree_posX = 800
+            TwoTree_posX = 800
+            LotTree_posX = 800
+
+            game_exit = True
+            
+            while game_exit:
+
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        game_exit = False
+                        game_loop = False
+
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_SPACE:
+                            game_exit = False
+                            game_loop = True
+
+                R_img = pg.image.load('return.png')
+                screen.blit(R_img, (350,50))
+                
+                pg.display.update()
+    
+
+    pg.display.update()
+
+pg.display.quit()
+quit()
